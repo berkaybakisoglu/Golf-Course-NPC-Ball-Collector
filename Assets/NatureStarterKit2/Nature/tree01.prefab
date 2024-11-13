@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 3323436}
   - component: {fileID: 2349130}
   - component: {fileID: 13658482}
-  m_Layer: 0
+  - component: {fileID: 8171231904443308901}
+  - component: {fileID: -1063954808340724426}
+  m_Layer: 8
   m_Name: tree01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,6 +120,41 @@ CapsuleCollider:
   m_Height: 10.130396
   m_Direction: 1
   m_Center: {x: 0.01, y: 4.5, z: -0.03}
+--- !u!114 &8171231904443308901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136824}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
+--- !u!208 &-1063954808340724426
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136824}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.7270002, y: 5.0660005, z: 3.5460002}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.14, y: 5.0660005, z: 0.508}
+  m_TimeToStationary: 0.5
 --- !u!21 &2108910
 Material:
   serializedVersion: 8

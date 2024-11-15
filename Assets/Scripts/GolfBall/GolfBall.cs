@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(GolfBallData))]
@@ -16,6 +17,7 @@ public class GolfBall : MonoBehaviour
     [SerializeField] private Renderer _golfBallRenderer;
     [SerializeField] private float _lineWidth = 0.05f;
     [SerializeField] private int _trajectoryResolution = 20;
+    [SerializeField] private Image _minimapImage;
 
     private GolfBallData _data;
     private LineRenderer _lineRenderer;
@@ -41,6 +43,7 @@ public class GolfBall : MonoBehaviour
         transform.position = spawnPosition;
         _data = data;
         _golfBallRenderer.material = data.Material;
+        _minimapImage.color = data.Material.color;
     }
 
     public void Collect()

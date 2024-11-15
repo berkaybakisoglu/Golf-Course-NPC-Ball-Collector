@@ -73,14 +73,14 @@ public class CollectingState : INPCState
 
     private void CleanupCollectionState()
     {
-        // Unsubscribe from animation events
+
         _npc.Animator.OnCollectAnimationEnd -= HandleCollectAnimatorEnd;
         _npc.Animator.OnCollectAnimationCollect -= HandleCollectAnimationCollect;
 
-        // Reset collecting state in animator
+
         _npc.Animator.SetCollecting(false);
 
-        // Unparent the target ball and trigger its collection behavior
+
         if (_targetBall != null)
         {
             _targetBall.transform.SetParent(null);
@@ -98,8 +98,7 @@ public class CollectingState : INPCState
             Debug.LogWarning("[CollectingState] NPCController reference is missing during collect animation.");
             return;
         }
-
-        // Ensure the target ball is assigned correctly
+        
         _targetBall = _npc.Targeting.TargetGolfBall;
         if (_targetBall != null)
         {
@@ -118,8 +117,7 @@ public class CollectingState : INPCState
             Debug.LogError("[CollectingState] NPCController reference is missing.");
             return;
         }
-
-        // Clean up collection-related event handlers and transition to the next state
+        
         _npc.Animator.OnCollectAnimationEnd -= HandleCollectAnimatorEnd;
 
         TransitionToReturningState();

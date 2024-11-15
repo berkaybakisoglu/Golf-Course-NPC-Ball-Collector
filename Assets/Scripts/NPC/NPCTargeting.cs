@@ -4,24 +4,6 @@ using UnityEngine.AI;
 
 public class NPCTargeting : MonoBehaviour
 {
-    private void OnDrawGizmos()
-    {
-        if (TargetGolfBall != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, TargetGolfBall.transform.position);
-            Gizmos.DrawSphere(TargetGolfBall.transform.position, 0.5f);
-        }
-
-        if (GolfBallManager.Instance != null)
-        {
-            foreach (GolfBall ball in GolfBallManager.Instance.GetActiveGolfBalls())
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(ball.transform.position, 0.3f);
-            }
-        }
-    }
 
     [Header("Scoring Weights")]
     [SerializeField] private float priorityWeight = 10f;

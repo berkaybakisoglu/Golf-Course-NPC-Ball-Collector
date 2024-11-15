@@ -57,15 +57,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
-        functionName: OnCollectAnimationEnded
+      - time: 0.46686748
+        functionName: OnCollectAnimationCollectEnded
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 23a17c04dc8f28740b86218ecaca3965, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.46686748
-        functionName: OnCollectAnimationCollectEnded
+      - time: 0.751693
+        functionName: OnCollectAnimationEnded
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 23a17c04dc8f28740b86218ecaca3965, type: 3}
         floatParameter: 0

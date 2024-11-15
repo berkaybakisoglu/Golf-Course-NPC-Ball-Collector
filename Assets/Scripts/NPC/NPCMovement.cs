@@ -13,6 +13,10 @@ public class NPCMovement : MonoBehaviour
     [SerializeField] private float _movementSpeed = 3.5f;
     [SerializeField] private float _stoppingDistance = 0.3f;
     private float _searchRadius =  3.0f; 
+
+    private NPCAnimator _animatorScript; // Reference to the Animator script
+    [SerializeField] private float _rotationSpeed = 5f; // Rotation speed
+
     #endregion
 
     #region Properties
@@ -27,6 +31,19 @@ public class NPCMovement : MonoBehaviour
     {
         _agent.speed = _movementSpeed;
         _agent.stoppingDistance = _stoppingDistance;
+        _agent.updateRotation = false; // Disable automatic rotation
+
+        // Get the NPCAnimator component
+        _animatorScript = GetComponent<NPCAnimator>();
+        if (_animatorScript == null)
+        {
+            Debug.LogError("NPCAnimator component not found on the NPC.");
+        }
+    }
+
+    private void Update()
+    {
+        HandleRotation();
     }
 
     #endregion
@@ -37,6 +54,7 @@ public class NPCMovement : MonoBehaviour
     {
         _npc = npcController;
     }
+
     public void SetDestination(Vector3 position)
     {
         if (!_agent.isActiveAndEnabled)
@@ -64,7 +82,11 @@ public class NPCMovement : MonoBehaviour
         {
             _agent.ResetPath();
             _agent.velocity = Vector3.zero;
-            _npc.Animator.SetMoving(false);
+
+            if (_animatorScript != null)
+            {
+                _animatorScript.SetIdle();
+            }
 
             if (disableAgent)
             {
@@ -85,5 +107,18 @@ public class NPCMovement : MonoBehaviour
     }
 
     #endregion
+
+    #region Private Methods
     
+    private void HandleRotation()
+    {
+        Vector3 velocity = _agent.velocity;
+        if (velocity.sqrMagnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
+        }
+    }
+
+    #endregion
 }

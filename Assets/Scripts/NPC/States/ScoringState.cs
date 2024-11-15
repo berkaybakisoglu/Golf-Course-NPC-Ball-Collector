@@ -37,7 +37,7 @@ public class ScoringState : INPCState
     {
         Vector3 spawnPosition = _npc.HandTransform.position;
         GolfBall ballToThrow = GolfBallManager.Instance.SpawnAnimationGolfBall(_collectedData, spawnPosition);
-        ballToThrow.ThrowGolfBallInto(spawnPosition, GameManager.Instance.ScoreZone.transform.position, 1,3);
+        ballToThrow.ThrowGolfBallInto(spawnPosition, GameManager.Instance.ScoreZone.transform.position, 1,1);
     }
 
     public void UpdateState(NPCController npc)

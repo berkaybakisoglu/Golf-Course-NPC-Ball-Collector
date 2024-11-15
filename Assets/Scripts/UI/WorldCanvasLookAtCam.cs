@@ -38,23 +38,19 @@ public class WorldCanvasLookAtCam : MonoBehaviour
             _timeSinceLastUpdate = 0f;
         }
 
-        UpdateBillboardRotation();
+        UpdateCanvasRotation();
     }
 
     #endregion
 
     #region Private Methods
 
-    private void UpdateBillboardRotation()
+    private void UpdateCanvasRotation()
     {
-        _directionToCamera = _mainCamera.transform.position - _cachedTransform.position;
-        _directionToCamera.y = 0; 
-        
-        if (_directionToCamera != Vector3.zero)
-        {
-            _cachedTransform.rotation = Quaternion.LookRotation(_directionToCamera);
-        }
+        _directionToCamera = _cachedTransform.position - _mainCamera.transform.position;
+        _cachedTransform.rotation = Quaternion.LookRotation(_directionToCamera);
     }
+
 
     #endregion
 }

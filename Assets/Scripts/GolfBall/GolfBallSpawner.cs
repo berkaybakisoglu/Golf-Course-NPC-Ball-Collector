@@ -169,9 +169,13 @@ public class GolfBallSpawner : MonoBehaviour
         float randomX = Random.Range(terrainPosition.x, terrainPosition.x + terrainSize.x);
         float randomZ = Random.Range(terrainPosition.z, terrainPosition.z + terrainSize.z);
         float y = _terrain.SampleHeight(new Vector3(randomX, 0, randomZ)) + terrainPosition.y;
+        
+        float spawnHeightOffset = 0.1f; //todo this definetly needs to get this value from somewhere else
+        y += spawnHeightOffset;
 
         return new Vector3(randomX, y, randomZ);
     }
+
 
     private bool IsValidSpawnPosition(Vector3 position)
     {

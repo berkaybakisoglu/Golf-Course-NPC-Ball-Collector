@@ -15,7 +15,6 @@ public class ReturningState : INPCState
 
     public void EnterState(NPCController npc)
     {
-        
         if (GameManager.Instance.ScoreZone != null)
         {
             _dropOffPoint = GameManager.Instance.ScoreZone.transform.position;
@@ -36,18 +35,18 @@ public class ReturningState : INPCState
     public void ExitState(NPCController npc)
     {
         npc.Animator.SetMoving(false);
-        // Clean up if necessary
     }
+
     public void OnTriggerEnter(NPCController npc, Collider other)
     {
         if (other.CompareTag("ScoreTarget"))
         {
+            npc.Movement.StopMovement();
             npc.TransitionToState(new ScoringState(_collectedData));
         }
     }
 
     public void OnTriggerExit(NPCController npc, Collider other)
     {
-        
     }
 }

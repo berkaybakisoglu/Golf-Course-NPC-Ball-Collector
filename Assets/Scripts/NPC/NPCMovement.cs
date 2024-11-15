@@ -8,15 +8,11 @@ public class NPCMovement : MonoBehaviour
 
     [SerializeField] private NavMeshAgent _agent;
     private Vector3 _currentTargetPosition;
-
-    #endregion
-
-    #region Serialized Fields
-
+    private NPCController _npc;
     [Header("Movement Settings")]
     [SerializeField] private float _movementSpeed = 3.5f;
     [SerializeField] private float _stoppingDistance = 0.3f;
-
+    private float _searchRadius =  3.0f; 
     #endregion
 
     #region Properties
@@ -37,6 +33,10 @@ public class NPCMovement : MonoBehaviour
 
     #region Public Methods
 
+    public void Initialize(NPCController npcController)
+    {
+        _npc = npcController;
+    }
     public void SetDestination(Vector3 position)
     {
         if (!_agent.isActiveAndEnabled)
@@ -46,8 +46,8 @@ public class NPCMovement : MonoBehaviour
         }
 
         NavMeshHit hit;
-        float searchRadius = 3.0f; // Adjust as needed
-        if (NavMesh.SamplePosition(position, out hit, searchRadius, NavMesh.AllAreas))
+       
+        if (NavMesh.SamplePosition(position, out hit, _searchRadius, NavMesh.AllAreas))
         {
             _currentTargetPosition = hit.position;
             _agent.SetDestination(_currentTargetPosition);
@@ -64,6 +64,7 @@ public class NPCMovement : MonoBehaviour
         {
             _agent.ResetPath();
             _agent.velocity = Vector3.zero;
+            _npc.Animator.SetMoving(false);
 
             if (disableAgent)
             {
@@ -84,4 +85,5 @@ public class NPCMovement : MonoBehaviour
     }
 
     #endregion
+    
 }

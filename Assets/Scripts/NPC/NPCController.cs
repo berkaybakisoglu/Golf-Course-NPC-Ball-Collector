@@ -25,6 +25,7 @@ public class NPCController : MonoBehaviour
     {
         _healthController.Initialize();
         _targeting.Initialize(this);
+        _movement.Initialize(this);
         _healthController.OnHealthDepleted += HandleHealthDepleted;
         TransitionToState(new SearchingState());
     }

@@ -4,9 +4,6 @@ using UnityEngine.AI;
 
 public class NPCTargeting : MonoBehaviour
 {
-    /// <summary>
-    /// Visualizes the target and all available golf balls in the editor for debugging purposes.
-    /// </summary>
     private void OnDrawGizmos()
     {
         if (TargetGolfBall != null)
@@ -44,8 +41,8 @@ public class NPCTargeting : MonoBehaviour
         _distanceToScoringZone.Clear();
         foreach (GolfBall golfBall in _availableGolfBalls)
         {
-            float distanceToCart = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
-            _distanceToScoringZone[golfBall] = distanceToCart;
+            float distanceToScoringZone = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
+            _distanceToScoringZone[golfBall] = distanceToScoringZone;
         }
     }
 
@@ -91,8 +88,6 @@ public class NPCTargeting : MonoBehaviour
 
         // Dynamic weight adjustment
         float dynamicPriorityWeight = priorityWeight * (1f + healthFactor); // Higher priority weight when health is high
-        float dynamicDistanceWeight = distanceWeight;
-        float dynamicPathWeight = pathWeight;
 
         GolfBall bestBall = null;
         float bestScore = Mathf.NegativeInfinity;

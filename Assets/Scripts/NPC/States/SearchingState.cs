@@ -6,8 +6,13 @@ public class SearchingState : INPCState
     public NPCStateEnum StateType => NPCStateEnum.Searching;
     public void OnTriggerEnter(NPCController npc, Collider other)
     {
-        
+        if (npc.Targeting.TargetGolfBall != null && other.gameObject == npc.Targeting.TargetGolfBall.gameObject)
+        {
+            npc.Movement.StopMovement();
+            npc.TransitionToState(new CollectingState());
+        }
     }
+
 
     public void OnTriggerExit(NPCController npc, Collider other)
     {
@@ -36,31 +41,11 @@ public class SearchingState : INPCState
 
     public void UpdateState(NPCController npc)
     {
-        if (npc.Movement.HasReachedDestination())
-        {
-            if (npc.Targeting.TargetGolfBall != null)
-            {
-                // Transition to CollectingState
-                npc.TransitionToState(new CollectingState());
-            }
-            else
-            {
-                // Re-decide on the next target
-                npc.Targeting.DecideNextTarget();
-                if (npc.Targeting.TargetGolfBall != null)
-                {
-                    npc.Movement.SetDestination(npc.Targeting.TargetGolfBall.transform.position);
-                }
-                else
-                {
-                    // No golf balls available; remain in current state or transition to IdleState
-                }
-            }
-        }
+
     }
 
     public void ExitState(NPCController npc)
     {
-        // Clean up if necessary
+     
     }
 }

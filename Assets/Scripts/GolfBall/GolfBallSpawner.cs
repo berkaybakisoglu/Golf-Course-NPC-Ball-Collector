@@ -1,6 +1,7 @@
 // GolfBalls/GolfBallSpawner.cs
 using System;
 using System.Collections.Generic;
+using GolfCourse.Manager;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -51,7 +52,6 @@ public class GolfBallSpawner : MonoBehaviour
 
         _scoringZoneTransform = GameManager.Instance.ScoreZone.transform;
         FindClosestNavMeshPointToScoreZone();
-        // Initialize PathAnalyzer
         _pathAnalyzer = new PathAnalyzer();
         if (_pathAnalyzer == null)
         {
@@ -96,21 +96,6 @@ public class GolfBallSpawner : MonoBehaviour
         OnGolfBallSpawned?.Invoke(golfBall);
     }
 
-    public void SpawnGolfBallAtPosition(Vector3 position)
-    {
-        int level = DetermineLevelBasedOnPosition(position);
-        GolfBallData selectedData = GetGolfBallDataByLevel(level);
-
-        if (selectedData != null)
-        {
-            SpawnGolfBall(selectedData, position);
-        }
-        else
-        {
-            Debug.LogWarning($"[GolfBallSpawner] No golf ball data found for level {level}.");
-        }
-    }
-
     public GolfBall SpawnAnimationGolfBall(GolfBallData data, Vector3 position)
     {
         GolfBallData selectedData = data ?? GetGolfBallDataByLevel(DetermineLevelBasedOnPosition(position));
@@ -134,16 +119,15 @@ public class GolfBallSpawner : MonoBehaviour
         
         if (includesLink || normalizedPathCost >= level2PathCostThreshold)
         {
-            return 3; // Hard
+            return 3; 
         }
-        else if (normalizedPathCost >= level1PathCostThreshold || isNearObstacle)
+
+        if (normalizedPathCost >= level1PathCostThreshold || isNearObstacle)
         {
-            return 2; // Medium
+            return 2; 
         }
-        else
-        {
-            return 1; // Easy
-        }
+
+        return 1;
     }
 
 
@@ -182,15 +166,13 @@ public class GolfBallSpawner : MonoBehaviour
 
     private bool IsValidSpawnPosition(Vector3 position)
     {
-        return IsFlatSurface(position) && IsPositionReachableByNPC(position);
+        return IsFlatSurface(position) && IsPositionReachableByNPC(position); 
     }
 
-    private void FindClosestNavMeshPointToScoreZone()
+    private void FindClosestNavMeshPointToScoreZone() // just to be sure its navmesh not blocking
     {
         NavMeshHit hit;
-        float maxDistance = 100f; // Adjust based on your game's scale
-
-        // Attempt to find the closest point on the NavMesh to the scoring zone
+        float maxDistance = 100f;
         bool found = NavMesh.SamplePosition(_scoringZoneTransform.position, out hit, maxDistance, NavMesh.AllAreas);
 
         if (found)
@@ -212,14 +194,12 @@ public class GolfBallSpawner : MonoBehaviour
             {
                 pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
             }
-
-            // Use PathAnalyzer to check if the path includes any NavMeshLink
+            
             includesLink = _pathAnalyzer.PathIncludesNavMeshLink(path);
 
             return pathLength;
         }
-
-        return Mathf.Infinity; // Path not reachable
+        return Mathf.Infinity; 
     }
 
 
@@ -227,7 +207,7 @@ public class GolfBallSpawner : MonoBehaviour
     private bool IsFlatSurface(Vector3 position)
     {
         Vector3 normal = GetTerrainNormal(position);
-        return Vector3.Angle(normal, Vector3.up) < 5f; // Threshold for flatness
+        return Vector3.Angle(normal, Vector3.up) < 5f; 
     }
 
     private Vector3 GetTerrainNormal(Vector3 position)

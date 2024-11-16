@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using GolfCourse.Manager;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Renderer))]
@@ -97,7 +98,7 @@ public class GolfBall : MonoBehaviour
     {
         _lineRenderer.enabled = false;
         GolfBallManager.Instance.UnregisterGolfBall(this);
-        GameManager.Instance.ScoreZone.CollectGolfBall(this);
+        GameManager.Instance.ScoreZone.CollectedGolfBall(this);
     }
 
     private Vector3[] CalculateParabolicTrajectory(Vector3 start, Vector3 end, float height, int resolution)

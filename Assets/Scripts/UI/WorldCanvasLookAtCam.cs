@@ -1,56 +1,60 @@
 using UnityEngine;
-public class WorldCanvasLookAtCam : MonoBehaviour
+
+namespace GolfCourse.UI
 {
-    #region Fields
-
-    private Camera _mainCamera;
-    private Transform _cachedTransform;
-    private Vector3 _directionToCamera;
-
-    // Frequency control for updates, otherwise this makes too many draw calls if too many objects have it
-    [SerializeField] private bool _useReducedUpdateFrequency = false;
-    [SerializeField] private float _updateInterval = 0.2f;
-    private float _timeSinceLastUpdate = 0f;
-
-    #endregion
-
-    #region Unity Methods
-
-    private void Awake()
+    public class WorldCanvasLookAtCam : MonoBehaviour
     {
-        _cachedTransform = transform;
-        _mainCamera = Camera.main;
+        #region Fields
 
-        if (_mainCamera == null)
+        private Camera _mainCamera;
+        private Transform _cachedTransform;
+        private Vector3 _directionToCamera;
+
+        // Frequency control for updates, otherwise this makes too many draw calls if too many objects have it
+        [SerializeField] private bool _useReducedUpdateFrequency = false;
+        [SerializeField] private float _updateInterval = 0.2f;
+        private float _timeSinceLastUpdate = 0f;
+
+        #endregion
+
+        #region Unity Methods
+
+        private void Awake()
         {
-            Debug.LogError("[WorldCanvasLookAtCam] Main camera not found.");
-        }
-    }
+            _cachedTransform = transform;
+            _mainCamera = Camera.main;
 
-    private void LateUpdate()
-    {
-        if (_mainCamera == null) return;
-
-        if (_useReducedUpdateFrequency)
-        {
-            _timeSinceLastUpdate += Time.deltaTime;
-            if (_timeSinceLastUpdate < _updateInterval) return;
-            _timeSinceLastUpdate = 0f;
+            if (_mainCamera == null)
+            {
+                Debug.LogError("[WorldCanvasLookAtCam] Main camera not found.");
+            }
         }
 
-        UpdateCanvasRotation();
+        private void LateUpdate()
+        {
+            if (_mainCamera == null) return;
+
+            if (_useReducedUpdateFrequency)
+            {
+                _timeSinceLastUpdate += Time.deltaTime;
+                if (_timeSinceLastUpdate < _updateInterval) return;
+                _timeSinceLastUpdate = 0f;
+            }
+
+            UpdateCanvasRotation();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void UpdateCanvasRotation()
+        {
+            _directionToCamera = _cachedTransform.position - _mainCamera.transform.position;
+            _cachedTransform.rotation = Quaternion.LookRotation(_directionToCamera);
+        }
+
+
+        #endregion
     }
-
-    #endregion
-
-    #region Private Methods
-
-    private void UpdateCanvasRotation()
-    {
-        _directionToCamera = _cachedTransform.position - _mainCamera.transform.position;
-        _cachedTransform.rotation = Quaternion.LookRotation(_directionToCamera);
-    }
-
-
-    #endregion
 }

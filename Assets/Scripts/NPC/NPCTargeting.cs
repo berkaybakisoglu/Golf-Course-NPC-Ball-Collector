@@ -1,83 +1,138 @@
-using UnityEngine;
 using System.Collections.Generic;
+using GolfCourse.Manager;
+using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCTargeting : MonoBehaviour
+namespace GolfCourse.NPC
 {
-
-    [Header("Scoring Weights")]
-    [SerializeField] private float priorityWeight = 10f;
-    [SerializeField] private float distanceWeight = 1f;
-    [SerializeField] private float pathWeight = 0.5f;
-
-    public GolfBall TargetGolfBall { get; private set; }
-    private NPCController _npcController;
-    private Dictionary<GolfBall, float> _distanceToScoringZone = new Dictionary<GolfBall, float>();
-    private List<GolfBall> _availableGolfBalls = new List<GolfBall>();
-
-    private Transform _scoreZone;
-    private NavMeshPath _path;
-
-    private void InitializeDistanceCache()
+    public class NPCTargeting : MonoBehaviour
     {
-        _distanceToScoringZone.Clear();
-        foreach (GolfBall golfBall in _availableGolfBalls)
+        #region Fields
+
+        [Header("Scoring Weights")]
+        [SerializeField]
+        private float priorityWeight = 10f; // A decision SO might be much better but for testing
+
+        [SerializeField]
+        private float distanceWeight = 1f;
+
+        [SerializeField]
+        private float pathWeight = 0.5f;
+
+        private NPCController _npcController;
+        private Dictionary<GolfBall, float> _distanceToScoringZone = new Dictionary<GolfBall, float>();
+        private List<GolfBall> _availableGolfBalls = new List<GolfBall>();
+
+        private Transform _scoreZone;
+        private NavMeshPath _path;
+        
+        #endregion
+
+        #region Public Properties
+
+        public GolfBall TargetGolfBall { get; private set; }
+
+        #endregion
+        
+
+        #region Unity Events
+
+        private void OnDestroy()
         {
-            float distanceToScoringZone = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
-            _distanceToScoringZone[golfBall] = distanceToScoringZone;
-        }
-    }
-
-    public void Initialize(NPCController npcController)
-    {
-        _npcController = npcController;
-        _scoreZone = GameManager.Instance?.ScoreZone?.transform;
-        _path = new NavMeshPath();
-        _availableGolfBalls = GolfBallManager.Instance.GetActiveGolfBalls();
-        InitializeDistanceCache();
-        GolfBallManager.Instance.OnAvailableGolfBallsChanged += HandleAvailableGolfBallsChanged;
-    }
-
-    private void OnDestroy()
-    {
-        if (GolfBallManager.Instance != null)
-        {
-            GolfBallManager.Instance.OnAvailableGolfBallsChanged -= HandleAvailableGolfBallsChanged;
-        }
-    }
-
-    private void HandleAvailableGolfBallsChanged(List<GolfBall> updatedGolfBalls)
-    {
-        _availableGolfBalls = updatedGolfBalls;
-        InitializeDistanceCache();
-        DecideNextTarget();
-    }
-
-    /// <summary>
-    /// Decides the next target golf ball based on multiple factors.
-    /// </summary>
-    public void DecideNextTarget()
-    {
-        if (_npcController == null || _availableGolfBalls == null || _availableGolfBalls.Count == 0)
-        {
-            TargetGolfBall = null;
-            return;
+            if (GolfBallManager.Instance != null)
+            {
+                GolfBallManager.Instance.OnAvailableGolfBallsChanged -= HandleAvailableGolfBallsChanged;
+            }
         }
 
-        float healthFactor = _npcController.HealthController.CurrentHealth / _npcController.HealthController.MaxHealth;
-        Vector3 currentPosition = transform.position;
-        NavMeshAgent agent = _npcController.Movement.Agent;
+        #endregion
+        
+        public void Initialize(NPCController npcController,Transform scoreZone)
+        {
+            _npcController = npcController;
+            _scoreZone = scoreZone;
+            _path = new NavMeshPath();
+            _availableGolfBalls = GolfBallManager.Instance.GetActiveGolfBalls();
+            InitializeDistanceCache();
 
-        // Dynamic weight adjustment
-        float dynamicPriorityWeight = priorityWeight * (1f + healthFactor); // Higher priority weight when health is high
+            if (GolfBallManager.Instance != null)
+            {
+                GolfBallManager.Instance.OnAvailableGolfBallsChanged += HandleAvailableGolfBallsChanged;
+            }
+        }
 
-        GolfBall bestBall = null;
-        float bestScore = Mathf.NegativeInfinity;
+        private void InitializeDistanceCache()
+        {
+            _distanceToScoringZone.Clear();
 
-        foreach (GolfBall golfBall in _availableGolfBalls)
+            foreach (var golfBall in _availableGolfBalls)
+            {
+                float distance = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
+                _distanceToScoringZone[golfBall] = distance;
+            }
+        }
+        
+
+        #region Event Handlers
+
+        private void HandleAvailableGolfBallsChanged(List<GolfBall> updatedGolfBalls)
+        {
+            _availableGolfBalls = updatedGolfBalls;
+            InitializeDistanceCache();
+            DecideNextTarget();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void DecideNextTarget()
+        {
+            if (_npcController == null || _availableGolfBalls == null || _availableGolfBalls.Count == 0)
+            {
+                TargetGolfBall = null;
+                return;
+            }
+
+            float healthFactor = _npcController.HealthController.CurrentHealth / _npcController.HealthController.MaxHealth;
+            Vector3 currentPosition = transform.position;
+            NavMeshAgent agent = _npcController.Movement.Agent;
+            
+            float dynamicPriorityWeight = priorityWeight * (1f + healthFactor);
+
+            GolfBall bestBall = null;
+            float bestScore = Mathf.NegativeInfinity;
+
+            foreach (var golfBall in _availableGolfBalls)
+            {
+                float pathDistance = CalculatePathDistance(agent, golfBall.transform.position, currentPosition);
+                if (!_distanceToScoringZone.TryGetValue(golfBall, out float distanceToScoringZone))
+                {
+                    distanceToScoringZone = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
+                    _distanceToScoringZone[golfBall] = distanceToScoringZone;
+                }
+                
+                float score = CalculateScore(golfBall, pathDistance, distanceToScoringZone, healthFactor, dynamicPriorityWeight);
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestBall = golfBall;
+                }
+            }
+
+            TargetGolfBall = bestBall;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private float CalculatePathDistance(NavMeshAgent agent, Vector3 targetPosition, Vector3 currentPosition)
         {
             float pathDistance = 0f;
-            if (agent.CalculatePath(golfBall.transform.position, _path) && _path.corners.Length > 1)
+
+            if (agent.CalculatePath(targetPosition, _path) && _path.corners.Length > 1)
             {
                 for (int i = 1; i < _path.corners.Length; i++)
                 {
@@ -86,34 +141,19 @@ public class NPCTargeting : MonoBehaviour
             }
             else
             {
-                pathDistance = Vector3.Distance(currentPosition, golfBall.transform.position);
+                pathDistance = Vector3.Distance(currentPosition, targetPosition);
             }
 
-            // Use cached distance to cart
-            if (!_distanceToScoringZone.TryGetValue(golfBall, out float distanceToScoringZone))
-            {
-                // If not cached, calculate and cache it
-                distanceToScoringZone = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
-                _distanceToScoringZone[golfBall] = distanceToScoringZone;
-            }
-
-            // Scoring formula with dynamic weights
-            float score = CalculateScore(golfBall, pathDistance, distanceToScoringZone, healthFactor, dynamicPriorityWeight);
-
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestBall = golfBall;
-            }
+            return pathDistance;
         }
 
-        TargetGolfBall = bestBall;
-    }
+        private float CalculateScore(GolfBall golfBall, float pathDistance, float distanceToScoringZone, float healthFactor, float dynamicPriorityWeight)
+        {
+            return (golfBall.Data.PointValue * dynamicPriorityWeight)
+                   - (pathDistance * distanceWeight * (1f - healthFactor))
+                   - (distanceToScoringZone * pathWeight);
+        }
 
-    private float CalculateScore(GolfBall golfBall, float pathDistance, float distanceToScoringZone, float healthFactor, float dynamicPriorityWeight)
-    {
-        return (golfBall.Data.PointValue * dynamicPriorityWeight)
-               - (pathDistance * distanceWeight * (1f - healthFactor))
-               - (distanceToScoringZone * pathWeight);
+        #endregion
     }
 }

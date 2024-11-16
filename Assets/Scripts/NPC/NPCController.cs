@@ -1,6 +1,7 @@
-// NPCs/NPCController.cs
+
+using GolfCourse.Manager;
+using GolfCourse.NPC;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(NPCMovement))]
 [RequireComponent(typeof(NPCTargeting))]
@@ -24,7 +25,7 @@ public class NPCController : MonoBehaviour
     public void Initialize()
     {
         _healthController.Initialize();
-        _targeting.Initialize(this);
+        _targeting.Initialize(this,GameManager.Instance.ScoreZone.transform);
         _movement.Initialize(this);
         _healthController.OnHealthDepleted += HandleHealthDepleted;
         TransitionToState(new SearchingState());

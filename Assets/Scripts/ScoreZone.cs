@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GolfCourse.Manager;
 using UnityEngine;
 
 public class ScoreZone : MonoBehaviour
@@ -11,7 +12,7 @@ public class ScoreZone : MonoBehaviour
     
     #region Public Methods
 
-    public void CollectGolfBall(GolfBall golfBall)
+    public void CollectedGolfBall(GolfBall golfBall)
     {
         _collectedGolfBalls.Add(golfBall);
         GameManager.Instance.InGameUI.SpawnFloatingText("+" + golfBall.Data.PointValue, golfBall.transform.position, () =>

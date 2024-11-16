@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e032029addb4bbc46a5adccd3f538077, type: 3}
-  m_Name: NewGolfBallData
+  m_Name: Level_3
   m_EditorClassIdentifier: 
   PointValue: 1
   Level: 1

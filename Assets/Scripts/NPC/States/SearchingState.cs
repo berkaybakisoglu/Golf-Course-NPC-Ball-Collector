@@ -1,4 +1,3 @@
-// NPCs/States/SearchingState.cs
 using UnityEngine;
 
 public class SearchingState : INPCState
@@ -21,18 +20,15 @@ public class SearchingState : INPCState
 
     public void EnterState(NPCController npc)
     {
-        // Decide on the next target
         npc.Targeting.DecideNextTarget();
 
         if (npc.Targeting.TargetGolfBall != null)
         {
-            // Set destination to the target golf ball
             npc.Movement.SetDestination(npc.Targeting.TargetGolfBall.transform.position);
             npc.Animator.SetMoving(true);
         }
         else
         {
-            // No golf balls available; NPC can idle or wait
             npc.Animator.SetMoving(false);
             Debug.Log("[SearchingState] No golf balls available.");
             ExitState(npc);

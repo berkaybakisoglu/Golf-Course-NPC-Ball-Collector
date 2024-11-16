@@ -6,7 +6,7 @@ TagManager:
   tags:
   - NPC
   - CinemachineTarget
-  - ScoreTarget
+  - ScoreZone
   layers:
   - Default
   - TransparentFX

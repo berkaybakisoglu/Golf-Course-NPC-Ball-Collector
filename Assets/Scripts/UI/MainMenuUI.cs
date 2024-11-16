@@ -4,30 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : MonoBehaviour
+namespace GolfCourse.UI
 {
-    [SerializeField] private Button startButton;
-
-    private void Awake()
+    public class MainMenuUI : MonoBehaviour
     {
-        startButton.onClick.AddListener(StartGame);
-    }
+        [SerializeField] private Button startButton;
 
-    private void StartGame()
-    {
-        startButton.onClick.RemoveListener(StartGame);
-        GameSceneManager.Instance.LoadScene(GameSceneManager.GameSceneName);
-    }
+        private void Awake()
+        {
+            startButton.onClick.AddListener(StartGame);
+        }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void StartGame()
+        {
+            startButton.onClick.RemoveListener(StartGame);
+            GameSceneManager.Instance.LoadScene(GameSceneManager.GameSceneName);
+        }
     }
 }

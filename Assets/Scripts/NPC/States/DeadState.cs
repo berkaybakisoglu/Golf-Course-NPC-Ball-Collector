@@ -30,7 +30,7 @@ public class DeadState : INPCState
 
     public void ExitState(NPCController npc)
     {
-
+        _npc.StopAllCoroutines();
     }
 
     #endregion

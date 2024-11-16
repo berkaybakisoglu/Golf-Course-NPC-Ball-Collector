@@ -1,4 +1,6 @@
 // NPCs/States/ReturningState.cs
+
+using GolfCourse.Manager;
 using UnityEngine;
 
 public class ReturningState : INPCState
@@ -18,8 +20,16 @@ public class ReturningState : INPCState
         if (GameManager.Instance.ScoreZone != null)
         {
             _dropOffPoint = GameManager.Instance.ScoreZone.transform.position;
-            npc.Movement.SetDestination(_dropOffPoint);
-            npc.Animator.SetMoving(true);
+            Collider scoreZoneCollider = GameManager.Instance.ScoreZone.GetComponent<Collider>(); // check if already in zone, //todo make it better
+            if (scoreZoneCollider != null && scoreZoneCollider.bounds.Contains(npc.transform.position))
+            {
+                npc.TransitionToState(new ScoringState(_collectedData));
+            }
+            else
+            {
+                npc.Movement.SetDestination(_dropOffPoint);
+                npc.Animator.SetMoving(true);
+            }
         }
         else
         {
@@ -27,6 +37,7 @@ public class ReturningState : INPCState
             npc.TransitionToState(new SearchingState());
         }
     }
+
 
     public void UpdateState(NPCController npc)
     {
@@ -39,7 +50,7 @@ public class ReturningState : INPCState
 
     public void OnTriggerEnter(NPCController npc, Collider other)
     {
-        if (other.CompareTag("ScoreTarget"))
+        if (other.CompareTag("ScoreZone"))
         {
             npc.Movement.StopMovement();
             npc.TransitionToState(new ScoringState(_collectedData));

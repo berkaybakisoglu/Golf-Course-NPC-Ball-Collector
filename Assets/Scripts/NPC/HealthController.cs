@@ -1,4 +1,4 @@
-// Scripts/HealthController.cs
+using GolfCourse.UI;
 using UnityEngine;
 
 public class HealthController : MonoBehaviour

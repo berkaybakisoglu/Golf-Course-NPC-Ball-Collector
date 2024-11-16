@@ -1,5 +1,3 @@
-// NPCs/NPCAnimation.cs
-
 using System;
 using UnityEngine;
 
@@ -15,13 +13,13 @@ public class NPCAnimator : MonoBehaviour
     private int _isDeadHash;
     private int _isJumpingHash;
     private int _speedHash;
+
     public event Action OnCollectAnimationEnd;
     public event Action OnCollectAnimationCollect;
     public event Action OnScoreAnimationEnd;
     public event Action OnScoringAnimationThrowEnd;
 
     public event Action OnJumpAirEnd;
-
     public event Action OnJumpLandEnd;
 
     private void Awake()
@@ -42,8 +40,7 @@ public class NPCAnimator : MonoBehaviour
         _animator.SetBool(_isMovingHash, false);
         _animator.SetBool(_isScoringHash, false);
         _animator.SetBool(_isCollectingHash, false);
-        _animator.SetBool(_isJumpingHash,false);
-
+        _animator.SetBool(_isJumpingHash, false);
     }
 
     /// <summary>
@@ -56,25 +53,29 @@ public class NPCAnimator : MonoBehaviour
     }
 
     /// <summary>
-    /// Triggers the attack animation.
+    /// Sets the collecting state of the NPC.
     /// </summary>
+    /// <param name="isCollecting">Whether the NPC is collecting.</param>
     public void SetCollecting(bool isCollecting)
     {
-        _animator.SetBool(_isCollectingHash,isCollecting);
+        _animator.SetBool(_isCollectingHash, isCollecting);
     }
-    
+
     public void SetDead()
     {
         _animator.SetTrigger(_isDeadHash);
     }
+
     public void SetJumping()
     {
         _animator.SetTrigger(_isJumpingHash);
     }
+
     public void SetSpeed(float speed)
     {
         _animator.SetFloat(_speedHash, speed);
     }
+
     /// <summary>
     /// Method called by Animation Event at the end of collect animation.
     /// </summary>
@@ -87,7 +88,7 @@ public class NPCAnimator : MonoBehaviour
     {
         OnCollectAnimationCollect?.Invoke();
     }
-    
+
     public void OnScoreAnimationEnded()
     {
         OnScoreAnimationEnd?.Invoke();
@@ -105,9 +106,8 @@ public class NPCAnimator : MonoBehaviour
 
     public void OnJumpAired()
     {
-        OnJumpLandEnd?.Invoke();
+        OnJumpAirEnd?.Invoke(); // Corrected
     }
-    
 
     /// <summary>
     /// Optional: Method to handle other animation triggers.

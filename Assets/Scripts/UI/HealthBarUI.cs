@@ -1,4 +1,3 @@
-
 using System;
 using GolfCourse.NPC;
 using UnityEngine;

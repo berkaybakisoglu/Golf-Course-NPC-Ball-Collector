@@ -37,7 +37,6 @@ public class GolfBallSpawner : MonoBehaviour
         }
         Vector3 terrainSize = _terrain.terrainData.size;
         _maxPathLength = Vector3.Distance(_terrain.transform.position, _terrain.transform.position + new Vector3(terrainSize.x, 0, terrainSize.z));
-        // Find the NPC in the scene
         GameObject npc = GameObject.FindGameObjectWithTag("NPC");
         if (npc != null)
         {

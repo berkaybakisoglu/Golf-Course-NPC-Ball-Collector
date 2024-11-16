@@ -21,8 +21,9 @@ namespace GolfCourse.NPC
         [SerializeField] private float _stoppingDistance = 0.3f;
         private float _searchRadius = 3.0f; 
 
-        [SerializeField] private float _rotationSpeed = 5f; 
-
+        [SerializeField] private float _rotationSpeed = 5f;
+        [SerializeField] private float _sandDebuff = 2f;
+        [SerializeField] private float _corruptedDebuff = 4f;
         private bool _isTraversingLink = false;
         
         private Coroutine _currentTraversalCoroutine;
@@ -213,14 +214,14 @@ namespace GolfCourse.NPC
                 int area = NavMesh.GetAreaFromName("Sand");
                 if (area != -1 && (hit.mask & (1 << area)) != 0 && area == _sandAreaIndex)
                 {
-                    _agent.speed = _movementSpeed / 2f;
+                    _agent.speed = _movementSpeed / _sandDebuff;
                 }
                 else
                 {
                     area = NavMesh.GetAreaFromName("Corrupted");
                     if (area != -1 && (hit.mask & (1 << area)) != 0 && area == _corruptedAreaIndex)
                     {
-                        _agent.speed = _movementSpeed / 4f;
+                        _agent.speed = _movementSpeed / _corruptedDebuff;
                     }
                     else
                     {

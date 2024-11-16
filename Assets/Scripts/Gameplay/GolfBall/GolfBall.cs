@@ -19,21 +19,10 @@ public class GolfBall : MonoBehaviour
     [SerializeField] private float _lineWidth = 0.05f;
     [SerializeField] private int _trajectoryResolution = 20;
     [SerializeField] private Image _minimapImage;
-
+    [SerializeField] private Material _lineRendererMaterial;
+    [SerializeField] private LineRenderer _lineRenderer;
     private GolfBallData _data;
-    private LineRenderer _lineRenderer;
-
-    #endregion
-
-    #region Unity Callbacks
-
-    private void Awake()
-    {
-        if (_golfBallRenderer == null)
-        {
-            _golfBallRenderer = GetComponent<Renderer>();
-        }
-    }
+    
 
     #endregion
 
@@ -43,6 +32,7 @@ public class GolfBall : MonoBehaviour
     {
         transform.position = spawnPosition;
         _data = data;
+        _lineRenderer.enabled = false;
         _golfBallRenderer.material = data.Material;
         _minimapImage.color = data.Material.color;
     }
@@ -73,15 +63,11 @@ public class GolfBall : MonoBehaviour
 
     private void ConfigureLineRenderer()
     {
-        if (_lineRenderer == null)
-        {
-            _lineRenderer = gameObject.AddComponent<LineRenderer>();
-        }
-
         _lineRenderer.positionCount = 0;
         _lineRenderer.startWidth = _lineWidth;
         _lineRenderer.endWidth = _lineWidth;
-        _lineRenderer.material = _data.Material;
+        _lineRenderer.startColor = _data.Material.color;
+        _lineRenderer.endColor = _data.Material.color;
         _lineRenderer.enabled = true;
     }
 

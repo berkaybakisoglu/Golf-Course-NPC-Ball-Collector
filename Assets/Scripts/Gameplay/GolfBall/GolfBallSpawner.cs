@@ -29,7 +29,7 @@ public class GolfBallSpawner : MonoBehaviour
 
     public void Initialize()
     {
-        _terrain = Terrain.activeTerrain;
+        _terrain = Terrain.activeTerrain; // maybe a terrain manager?
         if (_terrain == null)
         {
             Debug.LogError("[GolfBallSpawner] No active terrain found in the scene.");

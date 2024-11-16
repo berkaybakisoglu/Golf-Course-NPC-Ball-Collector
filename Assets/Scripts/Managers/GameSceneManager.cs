@@ -14,8 +14,7 @@ namespace GolfCourse.Manager
         #endregion
 
         #region Fields
-
-        [SerializeField] private CanvasGroup _fadeCanvasGroup;
+        
         [SerializeField] private float _fadeDuration = 1f;
 
         private bool _isTransitioning;
@@ -45,9 +44,7 @@ namespace GolfCourse.Manager
         private IEnumerator LoadSceneRoutine(string sceneName) //todo would be much better with a proper loading screen
         {
             _isTransitioning = true;
-
-            yield return StartCoroutine(Fade(1f));
-
+            
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             asyncLoad.allowSceneActivation = false;
             while (!asyncLoad.isDone)
@@ -59,25 +56,10 @@ namespace GolfCourse.Manager
 
                 yield return null;
             }
-
-            yield return StartCoroutine(Fade(0f));
+            
             _isTransitioning = false;
         }
-
-        private IEnumerator Fade(float targetAlpha)
-        {
-            float startAlpha = _fadeCanvasGroup.alpha;
-            float timer = 0f;
-
-            while (timer <= _fadeDuration)
-            {
-                _fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / _fadeDuration);
-                timer += Time.deltaTime;
-                yield return null;
-            }
-
-            _fadeCanvasGroup.alpha = targetAlpha;
-        }
+        
 
         #endregion
     }

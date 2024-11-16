@@ -659,7 +659,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: -1.5}
   m_EndPoint: {x: 0, y: 0, z: 2.499999}
-  m_Width: 0
+  m_Width: 1
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -672,7 +672,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85677367}
   m_LocalRotation: {x: -0, y: 0.72606105, z: -0, w: -0.68763024}
-  m_LocalPosition: {x: -25.504633, y: 13.772991, z: -52.978508}
+  m_LocalPosition: {x: -25.51, y: 13.772991, z: -52.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2546,6 +2546,58 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: -0.01, y: 3.76, z: -0.06}
   m_TimeToStationary: 0.5
+--- !u!1 &207164398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207164399}
+  - component: {fileID: 207164400}
+  m_Layer: 0
+  m_Name: GameObject (11)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &207164399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207164398}
+  m_LocalRotation: {x: -0, y: 0.16308177, z: -0, w: 0.98661256}
+  m_LocalPosition: {x: 17.08, y: 13.772991, z: -50.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1109007662}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 18.772, z: 0}
+--- !u!114 &207164400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207164398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: -0.00000011920929, y: 2, z: 3}
+  m_EndPoint: {x: 0.00000011920929, y: 0, z: -2.0000012}
+  m_Width: 2
+  m_CostModifier: 5
+  m_Bidirectional: 0
+  m_AutoUpdatePosition: 1
+  m_Area: 2
 --- !u!224 &212182458 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4205559357443726295, guid: 540f4d5dd87c62f4c96082ceef2c9b8c, type: 3}
@@ -2972,7 +3024,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: -1.5}
   m_EndPoint: {x: 0, y: 0, z: 2.499999}
-  m_Width: 0
+  m_Width: 1
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -4778,7 +4830,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0.00000021606684, y: 0, z: -2.0000012}
   m_EndPoint: {x: -0.00000021606684, y: 0, z: 2.0000012}
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -5285,7 +5337,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0.0000015497208, y: -0.5, z: 3.5300746}
   m_EndPoint: {x: -0.0000015497208, y: 0.5, z: -3.5300746}
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -9692,8 +9744,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: af1ab45fda6a28f4782b96fd45a8910c, type: 2}
   - {fileID: 11400000, guid: 20888788db4486c40980a679a798ff5a, type: 2}
   _totalBallsToSpawn: 50
-  level1PathCostThreshold: 0.35
-  level2PathCostThreshold: 0.7
+  level1PathCostThreshold: 0.15
+  level2PathCostThreshold: 0.45
 --- !u!1 &893585713
 GameObject:
   m_ObjectHideFlags: 0
@@ -11497,7 +11549,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: -1.5}
   m_EndPoint: {x: 0, y: 0, z: 2.499999}
-  m_Width: 0
+  m_Width: 1
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -11509,14 +11561,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1104606782}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -28.675632, y: 13.772991, z: -53.87951}
+  m_LocalRotation: {x: -0, y: 0.96460354, z: -0, w: -0.26370454}
+  m_LocalPosition: {x: -29.34, y: 13.772991, z: -54.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1109007662}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -149.42, z: 0}
 --- !u!1 &1109007661
 GameObject:
   m_ObjectHideFlags: 0
@@ -11555,6 +11607,7 @@ Transform:
   - {fileID: 2127214578}
   - {fileID: 512332907}
   - {fileID: 1830615580}
+  - {fileID: 207164399}
   m_Father: {fileID: 1049171536}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12617,7 +12670,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0.00000021606684, y: 0, z: -2.0000012}
   m_EndPoint: {x: -0.00000021606684, y: 0, z: 2.0000012}
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -16560,7 +16613,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: -1.5}
   m_EndPoint: {x: 0, y: 0, z: 2.499999}
-  m_Width: 0
+  m_Width: 1
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -16573,7 +16626,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655133528}
   m_LocalRotation: {x: -0, y: 0.72606105, z: -0, w: -0.68763024}
-  m_LocalPosition: {x: -21.444633, y: 13.772991, z: -52.758507}
+  m_LocalPosition: {x: -21.45, y: 13.772991, z: -52.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16883,7 +16936,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: -0.00000011920929, y: 0, z: 2.0000012}
   m_EndPoint: {x: 0.00000011920929, y: 0, z: -2.0000012}
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -17902,7 +17955,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: -0.00000011920929, y: 1, z: 3}
   m_EndPoint: {x: 0.00000011920929, y: 2, z: -2.0000012}
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -20593,7 +20646,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_StartPoint: {x: -0.00000011920929, y: 0, z: 2.0000012}
   m_EndPoint: {x: 0.00000011920929, y: 0, z: -2.0000012}
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 5
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
@@ -20837,13 +20890,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5573724880458522832, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
+      propertyPath: m_WalkableMask
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 5573724880458522840, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: pathWeight
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5573724880458522840, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: priorityWeight
-      value: 20
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5573724880458522852, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: maxHealth

@@ -119,6 +119,7 @@ namespace GolfCourse.NPC
         
         private void HandleRotation()
         {
+            if (_isTraversingLink) return;
             Vector3 velocity = _agent.velocity;
             if (velocity.sqrMagnitude > 0.1f)
             {
@@ -172,20 +173,25 @@ namespace GolfCourse.NPC
 
             float jumpDuration = 0.5f;
             float elapsedTime = 0f;
-            
+
             while (elapsedTime < jumpDuration)
             {
                 float t = elapsedTime / jumpDuration;
-                float height = Mathf.Sin(t * Mathf.PI) * 1.0f; 
+                float height = Mathf.Sin(t * Mathf.PI) * 1.0f;
                 transform.position = Vector3.Lerp(startPos, endPos, t) + Vector3.up * height;
+
+        
+                Vector3 direction = (endPos - startPos).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-            
+
             transform.position = endPos;
-            yield break;
         }
+
 
         private void CompleteJump()
         {

@@ -13,10 +13,16 @@ public class NPCAnimator : MonoBehaviour
     private int _isCollectingHash;
     private int _isScoringHash;
     private int _isDeadHash;
+    private int _isJumpingHash;
+    private int _speedHash;
     public event Action OnCollectAnimationEnd;
     public event Action OnCollectAnimationCollect;
     public event Action OnScoreAnimationEnd;
     public event Action OnScoringAnimationThrowEnd;
+
+    public event Action OnJumpAirEnd;
+
+    public event Action OnJumpLandEnd;
 
     private void Awake()
     {
@@ -27,6 +33,8 @@ public class NPCAnimator : MonoBehaviour
         _isCollectingHash = Animator.StringToHash("isCollecting");
         _isScoringHash = Animator.StringToHash("isScoring");
         _isDeadHash = Animator.StringToHash("isDead");
+        _isJumpingHash = Animator.StringToHash("isJumping");
+        _speedHash = Animator.StringToHash("speed");
     }
 
     public void SetIdle()
@@ -34,6 +42,7 @@ public class NPCAnimator : MonoBehaviour
         _animator.SetBool(_isMovingHash, false);
         _animator.SetBool(_isScoringHash, false);
         _animator.SetBool(_isCollectingHash, false);
+        _animator.SetBool(_isJumpingHash,false);
 
     }
 
@@ -58,7 +67,14 @@ public class NPCAnimator : MonoBehaviour
     {
         _animator.SetTrigger(_isDeadHash);
     }
-    
+    public void SetJumping()
+    {
+        _animator.SetTrigger(_isJumpingHash);
+    }
+    public void SetSpeed(float speed)
+    {
+        _animator.SetFloat(_speedHash, speed);
+    }
     /// <summary>
     /// Method called by Animation Event at the end of collect animation.
     /// </summary>
@@ -80,6 +96,16 @@ public class NPCAnimator : MonoBehaviour
     public void OnScoringAnimationThrowEnded()
     {
         OnScoringAnimationThrowEnd?.Invoke();
+    }
+
+    public void OnJumpLanded()
+    {
+        OnJumpLandEnd?.Invoke();
+    }
+
+    public void OnJumpAired()
+    {
+        OnJumpLandEnd?.Invoke();
     }
     
 

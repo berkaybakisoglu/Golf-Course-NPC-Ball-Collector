@@ -11,11 +11,16 @@ public class GolfBallSpawner : MonoBehaviour
 
     [SerializeField] private List<GolfBallData> _golfBallDataList;
     [SerializeField] private int _totalBallsToSpawn = 50;
+    [Header("Level Determination Thresholds")]
+    [SerializeField, Range(0f, 1f)] private float level1PathCostThreshold = 0.35f;
+    [SerializeField, Range(0f, 1f)] private float level2PathCostThreshold = 0.7f;
 
     private Terrain _terrain;
     private Transform _npcTransform;
     private Transform _scoringZoneTransform;
-
+    private float _maxPathLength;
+    private PathAnalyzer _pathAnalyzer;
+    private Vector3 _closestNavMeshPointToScoreZone;
     public event Action<GolfBall> OnGolfBallSpawned;
 
     #endregion
@@ -30,7 +35,8 @@ public class GolfBallSpawner : MonoBehaviour
             Debug.LogError("[GolfBallSpawner] No active terrain found in the scene.");
             return;
         }
-
+        Vector3 terrainSize = _terrain.terrainData.size;
+        _maxPathLength = Vector3.Distance(_terrain.transform.position, _terrain.transform.position + new Vector3(terrainSize.x, 0, terrainSize.z));
         // Find the NPC in the scene
         GameObject npc = GameObject.FindGameObjectWithTag("NPC");
         if (npc != null)
@@ -44,6 +50,13 @@ public class GolfBallSpawner : MonoBehaviour
         }
 
         _scoringZoneTransform = GameManager.Instance.ScoreZone.transform;
+        FindClosestNavMeshPointToScoreZone();
+        // Initialize PathAnalyzer
+        _pathAnalyzer = new PathAnalyzer();
+        if (_pathAnalyzer == null)
+        {
+            Debug.LogError("[GolfBallSpawner] Failed to initialize PathAnalyzer.");
+        }
     }
 
     #endregion
@@ -104,9 +117,6 @@ public class GolfBallSpawner : MonoBehaviour
         GolfBall golfBall = GolfBallPool.Instance.GetGolfBall();
         golfBall.InitializeGolfBall(selectedData, position);
 
-        // Placeholder for spawning with animation
-        // Add animation logic here if needed
-
         return golfBall;
     }
 
@@ -116,29 +126,26 @@ public class GolfBallSpawner : MonoBehaviour
 
     private int DetermineLevelBasedOnPosition(Vector3 position)
     {
-        bool nearObstacle10 = IsNearObstacle(position, 10f);
-        bool nearObstacle5 = IsNearObstacle(position, 5f);
-        bool nearObstacle2 = IsNearObstacle(position, 2f);
-        bool farFromPlayer = IsFarFromPlayer(position, 50f);
-        float pathCost = CalculatePathCostToScoringZone(position);
+        bool includesLink = false;
+        float pathCost = CalculatePathCostToScoringZone(position, ref includesLink);
 
-        if (!nearObstacle10 && pathCost < 20f)
+        float normalizedPathCost = pathCost / _maxPathLength;
+        bool isNearObstacle = IsNearObstacle(position, 2f);
+        
+        if (includesLink || normalizedPathCost >= level2PathCostThreshold)
         {
-            return 1;
+            return 3; // Hard
         }
-
-        if (nearObstacle5 && pathCost < 40f)
+        else if (normalizedPathCost >= level1PathCostThreshold || isNearObstacle)
         {
-            return 2;
+            return 2; // Medium
         }
-
-        if (nearObstacle2 && farFromPlayer && pathCost >= 40f)
+        else
         {
-            return 3;
+            return 1; // Easy
         }
-
-        return 1; // Default to Level 1
     }
+
 
     private GolfBallData GetGolfBallDataByLevel(int level)
     {
@@ -169,29 +176,34 @@ public class GolfBallSpawner : MonoBehaviour
         float randomX = Random.Range(terrainPosition.x, terrainPosition.x + terrainSize.x);
         float randomZ = Random.Range(terrainPosition.z, terrainPosition.z + terrainSize.z);
         float y = _terrain.SampleHeight(new Vector3(randomX, 0, randomZ)) + terrainPosition.y;
-        
-        float spawnHeightOffset = 0.1f; //todo this definetly needs to get this value from somewhere else
-        y += spawnHeightOffset;
 
         return new Vector3(randomX, y, randomZ);
     }
-
 
     private bool IsValidSpawnPosition(Vector3 position)
     {
         return IsFlatSurface(position) && IsPositionReachableByNPC(position);
     }
 
-    private float CalculatePathCostToScoringZone(Vector3 position)
+    private void FindClosestNavMeshPointToScoreZone()
     {
-        if (_scoringZoneTransform == null)
+        NavMeshHit hit;
+        float maxDistance = 100f; // Adjust based on your game's scale
+
+        // Attempt to find the closest point on the NavMesh to the scoring zone
+        bool found = NavMesh.SamplePosition(_scoringZoneTransform.position, out hit, maxDistance, NavMesh.AllAreas);
+
+        if (found)
         {
-            Debug.LogWarning("[GolfBallSpawner] Scoring zone transform is null.");
-            return Mathf.Infinity;
+            _closestNavMeshPointToScoreZone = hit.position;
         }
+    }
+    private float CalculatePathCostToScoringZone(Vector3 position, ref bool includesLink)
+    {
+        includesLink = false;
 
         NavMeshPath path = new NavMeshPath();
-        bool pathFound = NavMesh.CalculatePath(position, _scoringZoneTransform.position, NavMesh.AllAreas, path);
+        bool pathFound = NavMesh.CalculatePath(position, _closestNavMeshPointToScoreZone, NavMesh.AllAreas, path);
 
         if (pathFound && path.status == NavMeshPathStatus.PathComplete)
         {
@@ -201,11 +213,18 @@ public class GolfBallSpawner : MonoBehaviour
                 pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
             }
 
+            // Use PathAnalyzer to check for NavMeshLink intersections
+            if (_pathAnalyzer != null)
+            {
+                includesLink = _pathAnalyzer.PathIncludesNavMeshLink(path);
+            }
+
             return pathLength;
         }
 
         return Mathf.Infinity; // Path not reachable
     }
+
 
     private bool IsFlatSurface(Vector3 position)
     {
@@ -229,17 +248,6 @@ public class GolfBallSpawner : MonoBehaviour
         LayerMask obstacleLayerMask = LayerMask.GetMask("Obstacle");
         Collider[] colliders = Physics.OverlapSphere(position, radius, obstacleLayerMask);
         return colliders.Length > 0;
-    }
-
-    private bool IsFarFromPlayer(Vector3 position, float minDistance)
-    {
-        if (_npcTransform == null)
-        {
-            return false;
-        }
-
-        float distance = Vector3.Distance(position, _npcTransform.position);
-        return distance >= minDistance;
     }
 
     private bool IsPositionReachableByNPC(Vector3 position)

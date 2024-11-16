@@ -1,47 +1,51 @@
 using UnityEngine;
 
-public class SearchingState : INPCState
+namespace GolfCourse.NPC.State
 {
-    public NPCStateEnum StateType => NPCStateEnum.Searching;
-    public void OnTriggerEnter(NPCController npc, Collider other)
+    public class SearchingState : INPCState
     {
-        if (npc.Targeting.TargetGolfBall != null && other.gameObject == npc.Targeting.TargetGolfBall.gameObject)
+        public NPCStateEnum StateType => NPCStateEnum.Searching;
+
+        public void OnTriggerEnter(NPCController npc, Collider other)
         {
-            npc.Movement.StopMovement();
-            npc.TransitionToState(new CollectingState());
+            if (npc.Targeting.TargetGolfBall != null && other.gameObject == npc.Targeting.TargetGolfBall.gameObject)
+            {
+                npc.Movement.StopMovement();
+                npc.TransitionToState(new CollectingState());
+            }
         }
-    }
 
 
-    public void OnTriggerExit(NPCController npc, Collider other)
-    {
-    
-    }
-
-    public void EnterState(NPCController npc)
-    {
-        npc.Targeting.DecideNextTarget();
-
-        if (npc.Targeting.TargetGolfBall != null)
+        public void OnTriggerExit(NPCController npc, Collider other)
         {
-            npc.Movement.SetDestination(npc.Targeting.TargetGolfBall.transform.position);
-            npc.Animator.SetMoving(true);
+
         }
-        else
+
+        public void EnterState(NPCController npc)
         {
-            npc.Animator.SetMoving(false);
-            Debug.Log("[SearchingState] No golf balls available.");
-            ExitState(npc);
+            npc.Targeting.DecideNextTarget();
+
+            if (npc.Targeting.TargetGolfBall != null)
+            {
+                npc.Movement.SetDestination(npc.Targeting.TargetGolfBall.transform.position);
+                npc.Animator.SetMoving(true);
+            }
+            else
+            {
+                npc.Animator.SetMoving(false);
+                Debug.Log("[SearchingState] No golf balls available.");
+                ExitState(npc);
+            }
         }
-    }
 
-    public void UpdateState(NPCController npc)
-    {
+        public void UpdateState(NPCController npc)
+        {
 
-    }
+        }
 
-    public void ExitState(NPCController npc)
-    {
-     
+        public void ExitState(NPCController npc)
+        {
+
+        }
     }
 }

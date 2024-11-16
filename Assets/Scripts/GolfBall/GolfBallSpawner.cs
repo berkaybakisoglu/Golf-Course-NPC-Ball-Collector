@@ -1,4 +1,3 @@
-// GolfBalls/GolfBallSpawner.cs
 using System;
 using System.Collections.Generic;
 using GolfCourse.Manager;

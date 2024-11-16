@@ -24,8 +24,7 @@ namespace GolfCourse.NPC
         [SerializeField] private float _rotationSpeed = 5f; 
 
         private bool _isTraversingLink = false;
-
-        // Coroutine reference
+        
         private Coroutine _currentTraversalCoroutine;
 
         #endregion
@@ -147,7 +146,6 @@ namespace GolfCourse.NPC
 
         private void HandleJumpAirEnd()
         {
-            // Start traversing the off-mesh link now that the animation has reached the airborne state
             if (_agent.isOnOffMeshLink)
             {
                 if (_currentTraversalCoroutine != null)
@@ -160,7 +158,6 @@ namespace GolfCourse.NPC
 
         private void HandleJumpLandEnd()
         {
-            // Complete the traversal once the landing animation has ended
             if (_isTraversingLink)
             {
                 CompleteJump();

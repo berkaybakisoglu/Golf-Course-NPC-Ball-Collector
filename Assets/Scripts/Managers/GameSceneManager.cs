@@ -1,84 +1,84 @@
-// Managers/GameSceneManager.cs
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class GameSceneManager : Singleton<GameSceneManager>
+namespace GolfCourse.Manager
 {
-    #region Constants
-
-    public const string MainMenuSceneName = "MainMenuScene";
-    public const string GameSceneName = "GameScene";
-
-    #endregion
-    
-    #region Fields
-
-    [SerializeField] private CanvasGroup _fadeCanvasGroup;
-    [SerializeField] private float _fadeDuration = 1f;
-
-    private bool _isTransitioning;
-
-    #endregion
-
-    #region Public Methods
-    
-    public void LoadScene(string sceneName)
+    public class GameSceneManager : Singleton<GameSceneManager>
     {
-        if (!_isTransitioning)
+        #region Constants
+
+        public const string MainMenuSceneName = "MainMenuScene";
+        public const string GameSceneName = "GameScene";
+
+        #endregion
+
+        #region Fields
+
+        [SerializeField] private CanvasGroup _fadeCanvasGroup;
+        [SerializeField] private float _fadeDuration = 1f;
+
+        private bool _isTransitioning;
+
+        #endregion
+
+        #region Public Methods
+
+        public void LoadScene(string sceneName)
         {
-            StartCoroutine(LoadSceneRoutine(sceneName));
-        }
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    protected override void Awake()
-    {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
-    }
-    
-    private IEnumerator LoadSceneRoutine(string sceneName) //todo would be much better with a proper loading screen
-    {
-        _isTransitioning = true;
-        
-        yield return StartCoroutine(Fade(1f));
-        
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-        asyncLoad.allowSceneActivation = false;
-
-        // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
-            // If the loading is almost complete
-            if (asyncLoad.progress >= 0.9f)
+            if (!_isTransitioning)
             {
-                // Finish loading the scene
-                asyncLoad.allowSceneActivation = true;
+                StartCoroutine(LoadSceneRoutine(sceneName));
             }
-            yield return null;
         }
-        yield return StartCoroutine(Fade(0f));
-        _isTransitioning = false;
-    }
 
-    private IEnumerator Fade(float targetAlpha)
-    {
-        float startAlpha = _fadeCanvasGroup.alpha;
-        float timer = 0f;
+        #endregion
 
-        while (timer <= _fadeDuration)
+        #region Private Methods
+
+        protected override void Awake()
         {
-            _fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / _fadeDuration);
-            timer += Time.deltaTime;
-            yield return null;
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
         }
 
-        _fadeCanvasGroup.alpha = targetAlpha;
-    }
+        private IEnumerator LoadSceneRoutine(string sceneName) //todo would be much better with a proper loading screen
+        {
+            _isTransitioning = true;
 
-    #endregion
+            yield return StartCoroutine(Fade(1f));
+
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            asyncLoad.allowSceneActivation = false;
+            while (!asyncLoad.isDone)
+            {
+                if (asyncLoad.progress >= 0.9f)
+                {
+                    asyncLoad.allowSceneActivation = true;
+                }
+
+                yield return null;
+            }
+
+            yield return StartCoroutine(Fade(0f));
+            _isTransitioning = false;
+        }
+
+        private IEnumerator Fade(float targetAlpha)
+        {
+            float startAlpha = _fadeCanvasGroup.alpha;
+            float timer = 0f;
+
+            while (timer <= _fadeDuration)
+            {
+                _fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, timer / _fadeDuration);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            _fadeCanvasGroup.alpha = targetAlpha;
+        }
+
+        #endregion
+    }
 }

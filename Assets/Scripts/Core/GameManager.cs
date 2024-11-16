@@ -11,7 +11,6 @@ public class GameManager : Singleton<GameManager>
     
     void Start()
     {
-        NavMeshLinkManager.Instance.Initialize();
         GolfBallManager.Instance.Initialize();
         NPCManager.Instance.Initialize();
     }

@@ -212,12 +212,7 @@ public class GolfBallSpawner : MonoBehaviour
             {
                 pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
             }
-
-            // Use PathAnalyzer to check for NavMeshLink intersections
-            if (_pathAnalyzer != null)
-            {
-                includesLink = _pathAnalyzer.PathIncludesNavMeshLink(path);
-            }
+            
 
             return pathLength;
         }

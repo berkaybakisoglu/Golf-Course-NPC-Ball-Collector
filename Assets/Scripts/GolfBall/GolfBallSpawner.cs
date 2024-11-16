@@ -212,13 +212,16 @@ public class GolfBallSpawner : MonoBehaviour
             {
                 pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
             }
-            
+
+            // Use PathAnalyzer to check if the path includes any NavMeshLink
+            includesLink = _pathAnalyzer.PathIncludesNavMeshLink(path);
 
             return pathLength;
         }
 
         return Mathf.Infinity; // Path not reachable
     }
+
 
 
     private bool IsFlatSurface(Vector3 position)

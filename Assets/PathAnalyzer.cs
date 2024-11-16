@@ -1,4 +1,3 @@
-// Utilities/PathAnalyzer.cs
 
 using Unity.AI.Navigation;
 using UnityEngine;

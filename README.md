@@ -87,4 +87,4 @@ All weights are adjustable in the editor.
    - Activated/Deactivated using the `F` button.
    - Camera movement: `ASDWEQ` for position and rotation.
 
-
+[![Gameplay](https://img.youtube.com/vi/sA5RsNt9vLA/0.jpg)](https://youtu.be/sA5RsNt9vLA)

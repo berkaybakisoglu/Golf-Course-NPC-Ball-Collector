@@ -7,7 +7,7 @@ public class CameraToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) // Press 'F' to toggle cameras
+        if (Input.GetKeyDown(KeyCode.F))
         {
             bool isFreeCamActive = freeCamera.activeSelf;
 

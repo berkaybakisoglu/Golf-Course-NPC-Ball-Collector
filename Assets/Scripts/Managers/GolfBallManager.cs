@@ -6,17 +6,21 @@ namespace GolfCourse.Manager
 {
     public class GolfBallManager : Singleton<GolfBallManager>, IManager
     {
-        #region Events
 
+        #region Properties
+
+        public ObjectPool<GolfBall> GolfBallPool => _golfBallPool;
         public Action<List<GolfBall>> OnAvailableGolfBallsChanged;
 
         #endregion
-
+        
         #region Fields
 
         private List<GolfBall> _availableGolfBalls = new List<GolfBall>();
         private GolfBallSpawner _golfBallSpawner;
-        private GolfBallPool _golfBallPool;
+        private ObjectPool<GolfBall> _golfBallPool;
+        [SerializeField] private GolfBall _golfBallPrefab;
+        [SerializeField] private int _golfPoolSize = 25;
 
         #endregion
 
@@ -31,15 +35,9 @@ namespace GolfCourse.Manager
                 return;
             }
 
-            _golfBallPool = GolfBallPool.Instance;
-            if (_golfBallPool == null)
-            {
-                Debug.LogError("[GolfBallManager] No GolfBallPool found in the scene.");
-                return;
-            }
-
+            _golfBallPool = new ObjectPool<GolfBall>(_golfBallPrefab, _golfPoolSize);
             _golfBallSpawner.OnGolfBallSpawned += RegisterGolfBall;
-            _golfBallSpawner.Initialize();
+            _golfBallSpawner.Initialize(this);
             _golfBallSpawner.SpawnInitialGolfBalls();
             _golfBallSpawner.OnGolfBallSpawned -= RegisterGolfBall;
         }
@@ -59,7 +57,7 @@ namespace GolfCourse.Manager
                 OnAvailableGolfBallsChanged?.Invoke(_availableGolfBalls);
             }
 
-            _golfBallPool.ReturnGolfBall(golfBall);
+            _golfBallPool.ReturnObject(golfBall);
         }
 
         public GolfBall SpawnAnimationGolfBall(GolfBallData data, Vector3 position)

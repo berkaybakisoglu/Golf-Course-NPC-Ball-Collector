@@ -37,7 +37,7 @@ namespace GolfCourse.NPC.State
 
         #endregion
 
-        #region Collision Handlers
+        #region Unity Methods
 
         public void OnTriggerEnter(NPCController npc, Collider other)
         {

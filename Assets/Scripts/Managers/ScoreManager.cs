@@ -10,15 +10,9 @@ namespace GolfCourse.Manager
         private int _score;
 
         #endregion
-
-        #region Events
-
-        public event Action<int> OnScoreChanged;
-
-        #endregion
-
+        
         #region Properties
-
+        public event Action<int> OnScoreChanged;
         public int CurrentScore => _score;
 
         #endregion

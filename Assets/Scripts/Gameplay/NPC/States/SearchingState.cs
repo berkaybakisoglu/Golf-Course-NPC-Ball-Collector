@@ -4,22 +4,14 @@ namespace GolfCourse.NPC.State
 {
     public class SearchingState : INPCState
     {
+        #region Properties
+
         public NPCStateEnum StateType => NPCStateEnum.Searching;
 
-        public void OnTriggerEnter(NPCController npc, Collider other)
-        {
-            if (npc.Targeting.TargetGolfBall != null && other.gameObject == npc.Targeting.TargetGolfBall.gameObject)
-            {
-                npc.Movement.StopMovement();
-                npc.TransitionToState(new CollectingState());
-            }
-        }
+        #endregion
 
 
-        public void OnTriggerExit(NPCController npc, Collider other)
-        {
-
-        }
+        #region State Lifecycle Methods
 
         public void EnterState(NPCController npc)
         {
@@ -40,12 +32,33 @@ namespace GolfCourse.NPC.State
 
         public void UpdateState(NPCController npc)
         {
-
         }
 
         public void ExitState(NPCController npc)
         {
-
         }
+
+        #endregion
+
+        #region Unity Methods
+
+        public void OnTriggerEnter(NPCController npc, Collider other)
+        {
+            if (npc.Targeting.TargetGolfBall != null && other.gameObject == npc.Targeting.TargetGolfBall.gameObject)
+            {
+                npc.Movement.StopMovement();
+                npc.TransitionToState(new CollectingState());
+            }
+        }
+
+        public void OnTriggerExit(NPCController npc, Collider other)
+        {
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        #endregion
     }
 }

@@ -6,9 +6,10 @@ namespace GolfCourse.NPC
     [RequireComponent(typeof(Animator))]
     public class NPCAnimator : MonoBehaviour
     {
-        private Animator _animator;
+        #region Fields
 
-        // Parameter hashes for performance
+        private Animator _animator;
+        
         private int _isMovingHash;
         private int _isCollectingHash;
         private int _isScoringHash;
@@ -16,6 +17,11 @@ namespace GolfCourse.NPC
         private int _isJumpingHash;
         private int _speedHash;
 
+        #endregion
+
+        #region Properties
+
+        
         public event Action OnCollectAnimationEnd;
         public event Action OnCollectAnimationCollect;
         public event Action OnScoreAnimationEnd;
@@ -23,6 +29,11 @@ namespace GolfCourse.NPC
 
         public event Action OnJumpAirEnd;
         public event Action OnJumpLandEnd;
+        
+        #endregion
+
+
+        #region Unity Methods
 
         private void Awake()
         {
@@ -34,6 +45,10 @@ namespace GolfCourse.NPC
             _isJumpingHash = Animator.StringToHash("isJumping");
             _speedHash = Animator.StringToHash("speed");
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void SetIdle()
         {
@@ -102,5 +117,9 @@ namespace GolfCourse.NPC
         {
             _animator.SetBool(_isScoringHash, isScoring);
         }
+
+        #endregion
+
+
     }
 }

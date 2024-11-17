@@ -12,8 +12,9 @@ public class GolfBallSpawner : MonoBehaviour
     [SerializeField] private List<GolfBallData> _golfBallDataList;
     [SerializeField] private int _totalBallsToSpawn = 50;
     [Header("Level Determination Thresholds")]
-    [SerializeField, Range(0f, 1f)] private float level1PathCostThreshold = 0.35f;
-    [SerializeField, Range(0f, 1f)] private float level2PathCostThreshold = 0.7f;
+    [SerializeField, Range(0f, 1f)] private float _level1PathCostThreshold = 0.35f;
+    [SerializeField, Range(0f, 1f)] private float _level2PathCostThreshold = 0.7f;
+    [SerializeField, Range(1f, 5f)] private float _distanceToObstacle = 1f;
 
     private Terrain _terrain;
     private Transform _npcTransform;
@@ -21,14 +22,14 @@ public class GolfBallSpawner : MonoBehaviour
     private float _maxPathLength;
     private PathAnalyzer _pathAnalyzer;
     private Vector3 _closestNavMeshPointToScoreZone;
+    private GolfBallManager _manager;
     public event Action<GolfBall> OnGolfBallSpawned;
 
     #endregion
 
-    #region Initialization
-
-    public void Initialize()
+    public void Initialize(GolfBallManager manager)
     {
+        _manager = manager;
         _terrain = Terrain.activeTerrain; // maybe a terrain manager?
         if (_terrain == null)
         {
@@ -56,8 +57,7 @@ public class GolfBallSpawner : MonoBehaviour
             Debug.LogError("[GolfBallSpawner] Failed to initialize PathAnalyzer.");
         }
     }
-
-    #endregion
+    
 
     #region Public Methods
 
@@ -89,7 +89,7 @@ public class GolfBallSpawner : MonoBehaviour
 
     public void SpawnGolfBall(GolfBallData data, Vector3 position)
     {
-        GolfBall golfBall = GolfBallPool.Instance.GetGolfBall();
+        GolfBall golfBall = _manager.GolfBallPool.GetObject();
         golfBall.InitializeGolfBall(data, position);
         OnGolfBallSpawned?.Invoke(golfBall);
     }
@@ -97,7 +97,7 @@ public class GolfBallSpawner : MonoBehaviour
     public GolfBall SpawnAnimationGolfBall(GolfBallData data, Vector3 position)
     {
         GolfBallData selectedData = data ?? GetGolfBallDataByLevel(DetermineLevelBasedOnPosition(position));
-        GolfBall golfBall = GolfBallPool.Instance.GetGolfBall();
+        GolfBall golfBall = _manager.GolfBallPool.GetObject();
         golfBall.InitializeGolfBall(selectedData, position);
 
         return golfBall;
@@ -113,14 +113,14 @@ public class GolfBallSpawner : MonoBehaviour
         float pathCost = CalculatePathCostToScoringZone(position, ref includesLink);
 
         float normalizedPathCost = pathCost / _maxPathLength;
-        bool isNearObstacle = IsNearObstacle(position, 2f);
+        bool isNearObstacle = IsNearObstacle(position, 1f);
         
-        if (includesLink || normalizedPathCost >= level2PathCostThreshold)
+        if (includesLink || normalizedPathCost >= _level2PathCostThreshold)
         {
             return 3; 
         }
 
-        if (normalizedPathCost >= level1PathCostThreshold || isNearObstacle)
+        if (normalizedPathCost >= _level1PathCostThreshold || isNearObstacle)
         {
             return 2; 
         }

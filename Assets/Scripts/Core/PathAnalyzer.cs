@@ -4,8 +4,15 @@ using UnityEngine.AI;
 
 public class PathAnalyzer
 {
+    #region Fields
+
     private const float HeightTolerance = 0.5f;
     private const float Epsilon = 1e-4f;
+
+    #endregion
+
+
+    #region Public Methods
 
     public bool PathIncludesNavMeshLink(NavMeshPath path)
     {
@@ -14,10 +21,15 @@ public class PathAnalyzer
             if (PathIntersectsLink(path, link))
                 return true;
         }
+
         return false;
     }
 
-    private bool PathIntersectsLink(NavMeshPath path, NavMeshLink link)
+    #endregion
+
+    #region Private Methods
+
+        private bool PathIntersectsLink(NavMeshPath path, NavMeshLink link)
     {
         var linkStart = link.transform.TransformPoint(link.startPoint);
         var linkEnd = link.transform.TransformPoint(link.endPoint);
@@ -27,12 +39,14 @@ public class PathAnalyzer
             var segmentStart = path.corners[i - 1];
             var segmentEnd = path.corners[i];
 
-            if (Mathf.Abs(segmentStart.y - linkStart.y) > HeightTolerance && Mathf.Abs(segmentEnd.y - linkEnd.y) > HeightTolerance)
+            if (Mathf.Abs(segmentStart.y - linkStart.y) > HeightTolerance &&
+                Mathf.Abs(segmentEnd.y - linkEnd.y) > HeightTolerance)
                 continue;
 
             if (LinesIntersect(segmentStart, segmentEnd, linkStart, linkEnd))
                 return true;
         }
+
         return false;
     }
 
@@ -77,4 +91,9 @@ public class PathAnalyzer
     {
         return (pk.x - pi.x) * (pj.y - pi.y) - (pj.x - pi.x) * (pk.y - pi.y);
     }
+
+
+    #endregion
+
+    
 }

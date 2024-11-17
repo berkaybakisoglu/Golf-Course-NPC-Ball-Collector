@@ -27,6 +27,7 @@ namespace GolfCourse.NPC
         private bool _isTraversingLink = false;
         
         private Coroutine _currentTraversalCoroutine;
+        private Coroutine _rotationCoroutine;
 
         #endregion
 
@@ -127,17 +128,46 @@ namespace GolfCourse.NPC
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
             }
         }
+        private IEnumerator RotateTowardsHorizontal(Vector3 direction, Action onComplete)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            while (Quaternion.Angle(transform.rotation, targetRotation) > 5)
+            {
+                Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime * 100f);
+                transform.rotation = newRotation;
+                yield return null;
+            }
+            
+            transform.rotation = targetRotation;
+            onComplete?.Invoke();
+        }
 
         private void HandleOffMeshLinkTraversal()
         {
             if (_agent.isOnOffMeshLink && !_isTraversingLink)
             {
-                _isTraversingLink = true;
-                _agent.velocity = Vector3.zero;
+                // Calculate desired direction for the jump on the horizontal plane
+                Vector3 startPos = _agent.transform.position;
+                Vector3 endPos = _agent.currentOffMeshLinkData.endPos + Vector3.up * _agent.baseOffset;
 
-                // Trigger jump animation
-                _npc.Animator.SetJumping();
-                // The actual traversal will start when OnJumpAirEnd is invoked
+                Vector3 directionToEnd = (endPos - startPos).normalized;
+                directionToEnd.y = 0; // Ignore Y component for horizontal rotation
+                if (directionToEnd == Vector3.zero)
+                {
+                    directionToEnd = transform.forward; // Default to current forward if direction is zero
+                }
+
+                // Start rotation coroutine if not already rotating
+                if (_rotationCoroutine == null)
+                {
+                    _rotationCoroutine = StartCoroutine(RotateTowardsHorizontal(directionToEnd, () =>
+                    {
+                        _rotationCoroutine = null;
+                        _isTraversingLink = true;
+                        _agent.velocity = Vector3.zero;
+                        _npc.Animator.SetJumping();
+                    }));
+                }
             }
             else if (!_agent.isOnOffMeshLink && _isTraversingLink)
             {

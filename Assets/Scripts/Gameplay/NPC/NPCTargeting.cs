@@ -9,15 +9,12 @@ namespace GolfCourse.NPC
     {
         #region Fields
 
-        [Header("Scoring Weights")]
-        [SerializeField]
+        [Header("Scoring Weights")] [SerializeField]
         private float priorityWeight = 10f; // A decision SO might be much better but for testing
 
-        [SerializeField]
-        private float distanceWeight = 1f;
+        [SerializeField] private float distanceWeight = 1f;
 
-        [SerializeField]
-        private float pathWeight = 0.5f;
+        [SerializeField] private float pathWeight = 0.5f;
 
         private NPCController _npcController;
         private Dictionary<GolfBall, float> _distanceToScoringZone = new Dictionary<GolfBall, float>();
@@ -25,7 +22,7 @@ namespace GolfCourse.NPC
 
         private Transform _scoreZone;
         private NavMeshPath _path;
-        
+
         #endregion
 
         #region Public Properties
@@ -33,7 +30,7 @@ namespace GolfCourse.NPC
         public GolfBall TargetGolfBall { get; private set; }
 
         #endregion
-        
+
 
         #region Unity Events
 
@@ -46,8 +43,8 @@ namespace GolfCourse.NPC
         }
 
         #endregion
-        
-        public void Initialize(NPCController npcController,Transform scoreZone)
+
+        public void Initialize(NPCController npcController, Transform scoreZone)
         {
             _npcController = npcController;
             _scoreZone = scoreZone;
@@ -71,7 +68,7 @@ namespace GolfCourse.NPC
                 _distanceToScoringZone[golfBall] = distance;
             }
         }
-        
+
 
         #region Event Handlers
 
@@ -94,10 +91,11 @@ namespace GolfCourse.NPC
                 return;
             }
 
-            float healthFactor = _npcController.HealthController.CurrentHealth / _npcController.HealthController.MaxHealth;
+            float healthFactor = _npcController.HealthController.CurrentHealth /
+                                 _npcController.HealthController.MaxHealth;
             Vector3 currentPosition = transform.position;
             NavMeshAgent agent = _npcController.Movement.Agent;
-            
+
             float dynamicPriorityWeight = priorityWeight * (1f + healthFactor);
 
             GolfBall bestBall = null;
@@ -111,8 +109,9 @@ namespace GolfCourse.NPC
                     distanceToScoringZone = Vector3.Distance(golfBall.transform.position, _scoreZone.position);
                     _distanceToScoringZone[golfBall] = distanceToScoringZone;
                 }
-                
-                float score = CalculateScore(golfBall, pathDistance, distanceToScoringZone, healthFactor, dynamicPriorityWeight);
+
+                float score = CalculateScore(golfBall, pathDistance, distanceToScoringZone, healthFactor,
+                    dynamicPriorityWeight);
 
                 if (score > bestScore)
                 {
@@ -147,7 +146,8 @@ namespace GolfCourse.NPC
             return pathDistance;
         }
 
-        private float CalculateScore(GolfBall golfBall, float pathDistance, float distanceToScoringZone, float healthFactor, float dynamicPriorityWeight)
+        private float CalculateScore(GolfBall golfBall, float pathDistance, float distanceToScoringZone,
+            float healthFactor, float dynamicPriorityWeight)
         {
             return (golfBall.Data.PointValue * dynamicPriorityWeight)
                    - (pathDistance * distanceWeight * (1f - healthFactor))

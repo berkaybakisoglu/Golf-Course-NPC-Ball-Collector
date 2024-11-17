@@ -6,35 +6,70 @@ namespace GolfCourse.NPC.State
 {
     public class ScoringState : INPCState
     {
-        public NPCStateEnum StateType => NPCStateEnum.Scoring;
+        #region Fields
+
         private GolfBallData _collectedData;
         private NPCController _npc;
 
         private float _rotationDuration = 0.67f;
         private bool _isRotating = false;
-        private Coroutine _rotatingCourutine;
+        private Coroutine _rotatingCoroutine;
+
+        #endregion
+
+        #region Properties
+
+        public NPCStateEnum StateType => NPCStateEnum.Scoring;
+
+        #endregion
+
+        #region Constructors
 
         public ScoringState(GolfBallData data)
         {
             _collectedData = data;
         }
 
-        public void OnTriggerEnter(NPCController npc, Collider other)
-        {
+        #endregion
 
-        }
-
-        public void OnTriggerExit(NPCController npc, Collider other)
-        {
-
-        }
+        #region State Lifecycle Methods
 
         public void EnterState(NPCController npc)
         {
             _npc = npc;
             npc.Movement.StopMovement();
-            _rotatingCourutine = _npc.StartCoroutine(RotateTowardsScoreZone());
+            _rotatingCoroutine = _npc.StartCoroutine(RotateTowardsScoreZone());
         }
+
+        public void UpdateState(NPCController npc)
+        {
+        }
+
+        public void ExitState(NPCController npc)
+        {
+            _npc.Animator.OnScoringAnimationThrowEnd -= ThrowBallIntoScoreZone;
+            _npc.Animator.OnScoreAnimationEnd -= HandleScoreAnimationEnd;
+            _npc.Animator.SetScoring(false);
+            _npc = null;
+        }
+
+        #endregion
+
+        #region Unity Methods
+
+        public void OnTriggerEnter(NPCController npc, Collider other)
+        {
+            
+        }
+
+        public void OnTriggerExit(NPCController npc, Collider other)
+        {
+          
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private IEnumerator RotateTowardsScoreZone()
         {
@@ -51,8 +86,7 @@ namespace GolfCourse.NPC.State
 
                 while (elapsed < _rotationDuration)
                 {
-                    _npc.transform.rotation =
-                        Quaternion.Slerp(initialRotation, targetRotation, elapsed / _rotationDuration);
+                    _npc.transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsed / _rotationDuration);
                     elapsed += Time.deltaTime;
                     yield return null;
                 }
@@ -61,8 +95,7 @@ namespace GolfCourse.NPC.State
             }
 
             _isRotating = false;
-
-            // After rotation, initiate scoring animations
+            
             InitializeScoringAnimations();
         }
 
@@ -85,24 +118,11 @@ namespace GolfCourse.NPC.State
             ballToThrow.ThrowGolfBallInto(
                 spawnPosition,
                 GameManager.Instance.ScoreZone.transform.position,
-                1, // Adjust force as needed
-                1 // Adjust torque as needed
+                1, // they can get from somewhere else to arrangable
+                1 
             );
         }
 
-        public void UpdateState(NPCController npc)
-        {
-            // Optionally, handle any update logic here.
-            // For example, ensure that rotation has completed before proceeding.
-            // Currently handled by the coroutine.
-        }
-
-        public void ExitState(NPCController npc)
-        {
-            _npc.Animator.OnScoringAnimationThrowEnd -= ThrowBallIntoScoreZone;
-            _npc.Animator.OnScoreAnimationEnd -= HandleScoreAnimationEnd;
-            _npc.Animator.SetScoring(false);
-            _npc = null;
-        }
+        #endregion
     }
 }

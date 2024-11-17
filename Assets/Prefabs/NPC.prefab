@@ -1243,6 +1243,8 @@ MonoBehaviour:
   _movementSpeed: 3.5
   _stoppingDistance: 0.3
   _rotationSpeed: 5
+  _sandDebuff: 2
+  _corruptedDebuff: 4
 --- !u!114 &5573724880458522840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1255,9 +1257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2d9baad18342e448a1f21ca25d4f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  priorityWeight: 10
+  priorityWeight: 13
   distanceWeight: 1
-  pathWeight: 0.5
+  pathWeight: 2
 --- !u!114 &5573724880458522855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2950,6 +2952,18 @@ PrefabInstance:
       value: 1800
       objectReference: {fileID: 0}
     - target: {fileID: 4721134923579141872, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4721134923579141872, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4721134923579141872, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4721134923579141872, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2983,7 +2997,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4721134923579141872, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.242
+      value: 2.027
       objectReference: {fileID: 0}
     - target: {fileID: 4721134923579141872, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2997,6 +3011,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8219101002168112032, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: d2641748d965b3e4ebb023c30b5a2396, type: 2}
+    - target: {fileID: 8219101002168112032, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 1208431127606851162, guid: d2641748d965b3e4ebb023c30b5a2396, type: 2}
     - target: {fileID: 8345867919661683476, guid: befcb01abcaf4b94bb3dc1fdd232c8de, type: 3}
       propertyPath: _fillImage
       value: 

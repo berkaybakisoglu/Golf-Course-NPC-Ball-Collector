@@ -5,7 +5,20 @@ namespace GolfCourse.NPC.State
 {
     public class ReturningState : INPCState
     {
+        #region Fields
+
+        private Vector3 _dropOffPoint;
+        private GolfBallData _collectedData;
+
+        #endregion
+
+        #region Properties
+
         public NPCStateEnum StateType => NPCStateEnum.Returning;
+
+        #endregion
+
+        #region Constructors
 
         public ReturningState(GolfBallData data)
         {
@@ -13,17 +26,18 @@ namespace GolfCourse.NPC.State
             _collectedData = data;
         }
 
-        private Vector3 _dropOffPoint;
-        private GolfBallData _collectedData;
+        #endregion
+
+        #region State Lifecycle Methods
 
         public void EnterState(NPCController npc)
         {
             if (GameManager.Instance.ScoreZone != null)
             {
                 _dropOffPoint = GameManager.Instance.ScoreZone.transform.position;
-                Collider scoreZoneCollider =
-                    GameManager.Instance.ScoreZone
-                        .GetComponent<Collider>(); // check if already in zone, //todo make it better
+                Collider scoreZoneCollider = GameManager.Instance.ScoreZone.GetComponent<Collider>();
+
+                // Check if already in zone TODO: make this better
                 if (scoreZoneCollider != null && scoreZoneCollider.bounds.Contains(npc.transform.position))
                 {
                     npc.TransitionToState(new ScoringState(_collectedData));
@@ -41,15 +55,19 @@ namespace GolfCourse.NPC.State
             }
         }
 
-
         public void UpdateState(NPCController npc)
         {
+            
         }
 
         public void ExitState(NPCController npc)
         {
             npc.Animator.SetMoving(false);
         }
+
+        #endregion
+
+        #region Unity Methods
 
         public void OnTriggerEnter(NPCController npc, Collider other)
         {
@@ -62,6 +80,10 @@ namespace GolfCourse.NPC.State
 
         public void OnTriggerExit(NPCController npc, Collider other)
         {
+          
         }
+
+        #endregion
+        
     }
 }

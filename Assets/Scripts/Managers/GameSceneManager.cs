@@ -14,8 +14,6 @@ namespace GolfCourse.Manager
         #endregion
 
         #region Fields
-        
-        [SerializeField] private float _fadeDuration = 1f;
 
         private bool _isTransitioning;
 

@@ -114,7 +114,7 @@ public class GolfBallSpawner : MonoBehaviour
         float pathCost = CalculatePathCostToScoringZone(position, ref includesLink);
 
         float normalizedPathCost = pathCost / _maxPathLength;
-        bool isNearObstacle = IsNearObstacle(position, 1f);
+        bool isNearObstacle = IsNearObstacle(position, _distanceToObstacle);
         
         if (includesLink || normalizedPathCost >= _level2PathCostThreshold)
         {

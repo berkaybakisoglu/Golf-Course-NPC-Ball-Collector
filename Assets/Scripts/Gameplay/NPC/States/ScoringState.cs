@@ -12,7 +12,6 @@ namespace GolfCourse.NPC.State
         private NPCController _npc;
 
         private float _rotationDuration = 0.67f;
-        private bool _isRotating = false;
         private Coroutine _rotatingCoroutine;
 
         #endregion
@@ -73,8 +72,6 @@ namespace GolfCourse.NPC.State
 
         private IEnumerator RotateTowardsScoreZone()
         {
-            _isRotating = true;
-
             Vector3 direction = GameManager.Instance.ScoreZone.transform.position - _npc.transform.position;
             direction.y = 0;
 
@@ -93,8 +90,6 @@ namespace GolfCourse.NPC.State
 
                 _npc.transform.rotation = targetRotation;
             }
-
-            _isRotating = false;
             
             InitializeScoringAnimations();
         }

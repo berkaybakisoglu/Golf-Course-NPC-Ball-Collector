@@ -20978,6 +20978,10 @@ PrefabInstance:
       propertyPath: priorityWeight
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 5573724880458522852, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
+      propertyPath: healthDecreasingWeight
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5987415606356025797, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

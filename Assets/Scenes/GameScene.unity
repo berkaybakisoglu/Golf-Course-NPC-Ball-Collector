@@ -20592,7 +20592,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5573724880458522840, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: priorityWeight
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5573724880458522852, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: healthDecreasingWeight

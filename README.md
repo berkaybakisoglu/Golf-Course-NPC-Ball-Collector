@@ -27,7 +27,7 @@ The map contains four types of terrain layers:(Speed debuffs can change by edito
   - Run
   - Collect
   - Score
-  - Jump
+  - Jump (Cost 2 on navmesh)
 
 ## Golf Balls
 ### Current Setup

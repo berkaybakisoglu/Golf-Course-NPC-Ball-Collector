@@ -9650,8 +9650,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0eaf075379da7e94aa0177946c7f6a85, type: 2}
   - {fileID: 11400000, guid: af1ab45fda6a28f4782b96fd45a8910c, type: 2}
   _totalBallsToSpawn: 30
-  _level1PathCostThreshold: 0.35
-  _level2PathCostThreshold: 0.7
+  _level1PathCostThreshold: 0.2
+  _level2PathCostThreshold: 0.6
   _distanceToObstacle: 1
 --- !u!1 &893585713
 GameObject:
@@ -20840,6 +20840,10 @@ PrefabInstance:
     - target: {fileID: 5391759015640418104, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573724880458522840, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
+      propertyPath: priorityWeight
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5987415606356025797, guid: 5617f9243761297489d87b3a35ac297b, type: 3}
       propertyPath: m_AnchorMax.x

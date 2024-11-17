@@ -15,7 +15,7 @@ public class GolfBallSpawner : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float _level1PathCostThreshold = 0.35f;
     [SerializeField, Range(0f, 1f)] private float _level2PathCostThreshold = 0.7f;
     [SerializeField, Range(1f, 5f)] private float _distanceToObstacle = 1f;
-
+    private float _ballSpawnOffsetY = 0.05f;
     private Terrain _terrain;
     private Transform _npcTransform;
     private Transform _scoringZoneTransform;
@@ -73,6 +73,7 @@ public class GolfBallSpawner : MonoBehaviour
 
                 if (selectedData != null)
                 {
+                    spawnPosition.y += _ballSpawnOffsetY;
                     SpawnGolfBall(selectedData, spawnPosition);
                 }
                 else
@@ -193,7 +194,7 @@ public class GolfBallSpawner : MonoBehaviour
                 pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
             }
             
-            includesLink = _pathAnalyzer.PathIncludesNavMeshLink(path);
+            includesLink = _pathAnalyzer.DestinationOnlyReachableViaLink(position, _closestNavMeshPointToScoreZone);
 
             return pathLength;
         }

@@ -31,7 +31,7 @@ The map contains four types of terrain layers:(Speed debuffs can change by edito
 
 ## Golf Balls
 ### Current Setup
-- 3 golf balls are randomly created at the start of the game.
+- 30 golf balls are randomly created on the terrain at the start of the game.
 - **Ball Creation Assumptions**:
   - Balls are always created on flat terrain.
   - Balls must be reachable by the player.
@@ -42,6 +42,7 @@ The game selects a random valid spot for each golf ball on the map.
 #### Spot Selection
 1. Calculate the path cost between the spot and the scoring area.
 2. Normalize the value with the maximum path.
+3. Check the thresholds and the value to determine level
 
 #### Threshold Evaluation
 - **Easy**: Close to the scoring area with no obstacles (`0-0.2` or no obstacle).
